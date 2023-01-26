@@ -1,0 +1,14 @@
+{
+  "name": "vending-machine-problem",
+  "version": "1.0.0",
+  "description": "Vending Maching problem",
+  "main": "index.js",
+  "scripts": {
+    "test": "jest"
+  },
+  "author": "Me",
+  "license": "ISC",
+  "devDependencies": {
+    "jest": "^29.4.0"
+  }
+}
