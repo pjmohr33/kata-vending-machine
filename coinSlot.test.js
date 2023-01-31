@@ -53,7 +53,20 @@ describe('calculate coin value', () => {
     coinSlot.insertCoin(QUARTER_DIAMETER, QUARTER_THICKNESS, QUARTER_WEIGHT);
     coinSlot.insertCoin(QUARTER_DIAMETER, QUARTER_THICKNESS, QUARTER_WEIGHT);
     coinSlot.insertCoin(DIME_DIAMETER, DIME_THICKNESS, DIME_WEIGHT);
-    const collectedMonies = coinSlot.checkCollectedCoin();
+    const collectedMonies = coinSlot.checkCollectedMoney();
     expect(collectedMonies).toBe(.7)
+  });
+
+  it("tracks number of each coin inserted", ()=>{
+    let coinSlot = new CoinSlot();
+    coinSlot.insertCoin(NICKEL_DIAMETER, NICKEL_THICKNESS, NICKEL_WEIGHT);
+    coinSlot.insertCoin(NICKEL_DIAMETER, NICKEL_THICKNESS, NICKEL_WEIGHT);
+    coinSlot.insertCoin(QUARTER_DIAMETER, QUARTER_THICKNESS, QUARTER_WEIGHT);
+    coinSlot.insertCoin(QUARTER_DIAMETER, QUARTER_THICKNESS, QUARTER_WEIGHT);
+    coinSlot.insertCoin(DIME_DIAMETER, DIME_THICKNESS, DIME_WEIGHT);
+    const countCoins = coinSlot.checkCollectedCoins();
+    expect(countCoins.get("Nickles")).toBe(2);
+    expect(countCoins.get("Dimes")).toBe(1);
+    expect(countCoins.get("Quarters")).toBe(2);
   });
 });
