@@ -22,28 +22,44 @@ const BAD_COIN_WEIGHT = 2.5;
 const BAD_COIN_DIAMETER = 19.05;
 const BAD_COIN_THICKNESS = 1.52;
 
-function coinValue(diameter, thickness, weight) {
-  //Nickel Specs
-  if (diameter === NICKEL_DIAMETER &&
-    thickness === NICKEL_THICKNESS &&
-    weight === NICKEL_WEIGHT) {
-    return NICKEL_VALUE;
-    //Dime Specs
-  } else if (diameter === DIME_DIAMETER &&
-    thickness === DIME_THICKNESS &&
-    weight === DIME_WEIGHT) {
-    return DIME_VALUE;
-  } else if (diameter === QUARTER_DIAMETER &&
-    thickness === QUARTER_THICKNESS &&
-    weight === QUARTER_WEIGHT) {
-    return QUARTER_VALUE;
-  } else {
-    return BAD_COIN_VALUE
+//current inserted coin value
+let collectedCoin
+class CoinSlot {
+  constructor() {
+    collectedCoin = 0
+  }
+  insertCoin(diameter, thickness, weight) {
+    //Nickel Specs
+    if (diameter === NICKEL_DIAMETER &&
+      thickness === NICKEL_THICKNESS &&
+      weight === NICKEL_WEIGHT) {
+      collectedCoin += NICKEL_VALUE
+      return collectedCoin;
+
+      //Dime Specs
+    } else if (diameter === DIME_DIAMETER &&
+      thickness === DIME_THICKNESS &&
+      weight === DIME_WEIGHT) {
+        collectedCoin += DIME_VALUE
+      return collectedCoin;
+
+    } else if (diameter === QUARTER_DIAMETER &&
+      thickness === QUARTER_THICKNESS &&
+      weight === QUARTER_WEIGHT) {
+        collectedCoin += QUARTER_VALUE
+      return collectedCoin;
+
+    } else {
+      return BAD_COIN_VALUE
+    }
+  }
+  checkCollectedCoin (){
+    return collectedCoin;
   }
 }
 
 module.exports = {
-  coinValue,
+  CoinSlot,
   NICKEL_VALUE,
   NICKEL_DIAMETER,
   NICKEL_THICKNESS,
