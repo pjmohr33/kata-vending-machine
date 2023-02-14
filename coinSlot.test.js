@@ -1,4 +1,4 @@
-const { coinValue,
+const {
   NICKEL_VALUE,
   NICKEL_DIAMETER,
   NICKEL_THICKNESS,
@@ -16,11 +16,11 @@ const { coinValue,
   BAD_COIN_THICKNESS,
   BAD_COIN_WEIGHT,
   CoinSlot
-} = require("./coinSlot");
+} = require('./coinSlot');
 
 describe('Coinslot', () => {
-  it("identifies a nickel by its diameter, thickness, weight and outputs the new inserted coin value", () => {
-    let coinSlot = new CoinSlot();
+  it('identifies a nickel by its diameter, thickness, weight and outputs the new inserted coin value', () => {
+    const coinSlot = new CoinSlot();
     // const NewSlot = new CoinSlot();
     const result = coinSlot.insertCoin(NICKEL_DIAMETER, NICKEL_THICKNESS, NICKEL_WEIGHT);
     expect(result).toBe(NICKEL_VALUE);
@@ -28,50 +28,50 @@ describe('Coinslot', () => {
     // expect(NewResult).toBe(QUARTER_VALUE);
   });
 
-  it("indentifies a dime by diameter, thickness, weight, and outputs the new inserted coin value", () => {
-    let coinSlot = new CoinSlot();
+  it('indentifies a dime by diameter, thickness, weight, and outputs the new inserted coin value', () => {
+    const coinSlot = new CoinSlot();
     const result = coinSlot.insertCoin(DIME_DIAMETER, DIME_THICKNESS, DIME_WEIGHT);
     expect(result).toBe(DIME_VALUE);
   });
 
-  it("indentifies a quarter by diameter, thickness, weight, and outputs the new inserted coin value", () => {
-    let coinSlot = new CoinSlot();
+  it('indentifies a quarter by diameter, thickness, weight, and outputs the new inserted coin value', () => {
+    const coinSlot = new CoinSlot();
     const result = coinSlot.insertCoin(QUARTER_DIAMETER, QUARTER_THICKNESS, QUARTER_WEIGHT);
     expect(result).toBe(QUARTER_VALUE);
   });
 
   it("indentifies a bad coin by diameter, thickness, weight, and outputs invalid and doesn't change the current inserted coin value", () => {
-    let coinSlot = new CoinSlot();
+    const coinSlot = new CoinSlot();
     const result = coinSlot.insertCoin(BAD_COIN_DIAMETER, BAD_COIN_THICKNESS, BAD_COIN_WEIGHT);
     expect(result).toBe(BAD_COIN_VALUE);
   });
 
-  it("returns 70 cents when two quarters, a dime, and two nickels are insert", () => {
-    let coinSlot = new CoinSlot();
+  it('returns 70 cents when two quarters, a dime, and two nickels are insert', () => {
+    const coinSlot = new CoinSlot();
     coinSlot.insertCoin(NICKEL_DIAMETER, NICKEL_THICKNESS, NICKEL_WEIGHT);
     coinSlot.insertCoin(NICKEL_DIAMETER, NICKEL_THICKNESS, NICKEL_WEIGHT);
     coinSlot.insertCoin(QUARTER_DIAMETER, QUARTER_THICKNESS, QUARTER_WEIGHT);
     coinSlot.insertCoin(QUARTER_DIAMETER, QUARTER_THICKNESS, QUARTER_WEIGHT);
     coinSlot.insertCoin(DIME_DIAMETER, DIME_THICKNESS, DIME_WEIGHT);
     const collectedMonies = coinSlot.checkCollectedMoney();
-    expect(collectedMonies).toBe(.7)
+    expect(collectedMonies).toBe(0.7);
   });
 
-  it("tracks number of each coin inserted", () => {
-    let coinSlot = new CoinSlot();
+  it('tracks number of each coin inserted', () => {
+    const coinSlot = new CoinSlot();
     coinSlot.insertCoin(NICKEL_DIAMETER, NICKEL_THICKNESS, NICKEL_WEIGHT);
     coinSlot.insertCoin(NICKEL_DIAMETER, NICKEL_THICKNESS, NICKEL_WEIGHT);
     coinSlot.insertCoin(QUARTER_DIAMETER, QUARTER_THICKNESS, QUARTER_WEIGHT);
     coinSlot.insertCoin(QUARTER_DIAMETER, QUARTER_THICKNESS, QUARTER_WEIGHT);
     coinSlot.insertCoin(DIME_DIAMETER, DIME_THICKNESS, DIME_WEIGHT);
     const countCoins = coinSlot.checkCollectedCoins();
-    expect(countCoins.get("Nickles")).toBe(2);
-    expect(countCoins.get("Dimes")).toBe(1);
-    expect(countCoins.get("Quarters")).toBe(2);
+    expect(countCoins.get('Nickles')).toBe(2);
+    expect(countCoins.get('Dimes')).toBe(1);
+    expect(countCoins.get('Quarters')).toBe(2);
   });
 
-  it("returns the customer's coins when return coin's button is pressed",() => {
-    let coinSlot = new CoinSlot();
+  it("returns the customer's coins when return coin's button is pressed", () => {
+    const coinSlot = new CoinSlot();
     coinSlot.insertCoin(NICKEL_DIAMETER, NICKEL_THICKNESS, NICKEL_WEIGHT);
     coinSlot.insertCoin(NICKEL_DIAMETER, NICKEL_THICKNESS, NICKEL_WEIGHT);
     coinSlot.insertCoin(QUARTER_DIAMETER, QUARTER_THICKNESS, QUARTER_WEIGHT);
@@ -79,12 +79,10 @@ describe('Coinslot', () => {
     coinSlot.insertCoin(DIME_DIAMETER, DIME_THICKNESS, DIME_WEIGHT);
     coinSlot.ReturnCoins();
     const newCounts = coinSlot.checkCollectedCoins();
-    expect(newCounts.get("Nickles")).toBe(0);
-    expect(newCounts.get("Dimes")).toBe(0);
-    expect(newCounts.get("Quarters")).toBe(0);
+    expect(newCounts.get('Nickles')).toBe(0);
+    expect(newCounts.get('Dimes')).toBe(0);
+    expect(newCounts.get('Quarters')).toBe(0);
     const newValue = coinSlot.checkCollectedMoney();
     expect(newValue).toBe(0);
   });
-
-
 });

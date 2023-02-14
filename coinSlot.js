@@ -1,83 +1,84 @@
-//Nickle Specifications
-const NICKEL_VALUE = .05;
+// Nickle Specifications
+const NICKEL_VALUE = 0.05;
 const NICKEL_WEIGHT = 5;
 const NICKEL_DIAMETER = 21.21;
 const NICKEL_THICKNESS = 1.95;
 
-//Dime Specifications
-const DIME_VALUE = .1;
+// Dime Specifications
+const DIME_VALUE = 0.1;
 const DIME_WEIGHT = 2.268;
 const DIME_DIAMETER = 17.91;
 const DIME_THICKNESS = 1.35;
 
-//Quarter Specifications
-const QUARTER_VALUE = .25;
+// Quarter Specifications
+const QUARTER_VALUE = 0.25;
 const QUARTER_WEIGHT = 5.670;
 const QUARTER_DIAMETER = 24.26;
 const QUARTER_THICKNESS = 1.75;
 
-//bad coin or penny specs
-const BAD_COIN_VALUE = "Invalid";
+// bad coin or penny specs
+const BAD_COIN_VALUE = 'Invalid';
 const BAD_COIN_WEIGHT = 2.5;
 const BAD_COIN_DIAMETER = 19.05;
 const BAD_COIN_THICKNESS = 1.52;
 
-//current inserted coin value/counts
-let collectedMoney
-let collectedCoinsCount
+// current inserted coin value/counts
+let collectedMoney;
+let collectedCoinsCount;
 
 class CoinSlot {
-  constructor() {
+  constructor () {
     collectedMoney = 0;
     collectedCoinsCount = new Map();
-    collectedCoinsCount.set("Nickles",0);
-    collectedCoinsCount.set("Dimes",0);
-    collectedCoinsCount.set("Quarters",0);
-
-
+    collectedCoinsCount.set('Nickles', 0);
+    collectedCoinsCount.set('Dimes', 0);
+    collectedCoinsCount.set('Quarters', 0);
   }
-  insertCoin(diameter, thickness, weight) {
-    //Nickel Specs
+
+  insertCoin (diameter, thickness, weight) {
+    // Nickel Specs
     if (diameter === NICKEL_DIAMETER &&
       thickness === NICKEL_THICKNESS &&
       weight === NICKEL_WEIGHT) {
-      collectedMoney += NICKEL_VALUE
-      collectedCoinsCount.set("Nickles",collectedCoinsCount.get("Nickles")+1)
+      collectedMoney += NICKEL_VALUE;
+      collectedCoinsCount.set('Nickles', collectedCoinsCount.get('Nickles') + 1);
       return collectedMoney;
 
-      //Dime Specs
+      // Dime Specs
     } else if (diameter === DIME_DIAMETER &&
       thickness === DIME_THICKNESS &&
       weight === DIME_WEIGHT) {
-        collectedMoney += DIME_VALUE
-        collectedCoinsCount.set("Dimes",collectedCoinsCount.get("Dimes")+1)
+      collectedMoney += DIME_VALUE;
+      collectedCoinsCount.set('Dimes', collectedCoinsCount.get('Dimes') + 1);
       return collectedMoney;
-
     } else if (diameter === QUARTER_DIAMETER &&
       thickness === QUARTER_THICKNESS &&
       weight === QUARTER_WEIGHT) {
-        collectedMoney += QUARTER_VALUE
-        collectedCoinsCount.set("Quarters",collectedCoinsCount.get("Quarters")+1)
+      collectedMoney += QUARTER_VALUE;
+      collectedCoinsCount.set('Quarters', collectedCoinsCount.get('Quarters') + 1);
       return collectedMoney;
-
     } else {
-      return BAD_COIN_VALUE
+      return BAD_COIN_VALUE;
     }
   }
-  checkCollectedMoney (){
+
+  checkCollectedMoney () {
     return collectedMoney;
   }
-  checkCollectedCoins() {
-    return collectedCoinsCount
+
+  checkCollectedCoins () {
+    return collectedCoinsCount;
   }
-  EmptyBucket(){
+
+  EmptyBucket () {
     collectedMoney = 0;
-    collectedCoinsCount.set("Nickles",0);
-    collectedCoinsCount.set("Dimes",0);
-    collectedCoinsCount.set("Quarters",0)
+    collectedCoinsCount.set('Nickles', 0);
+    collectedCoinsCount.set('Dimes', 0);
+    collectedCoinsCount.set('Quarters', 0);
   }
-  ReturnCoins() {
-    this.EmptyBucket()
+
+  ReturnCoins () {
+    this.EmptyBucket();
   }
 }
 
