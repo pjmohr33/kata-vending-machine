@@ -33,6 +33,8 @@ class CoinSlot {
     collectedCoinsCount.set("Nickles",0);
     collectedCoinsCount.set("Dimes",0);
     collectedCoinsCount.set("Quarters",0);
+
+
   }
   insertCoin(diameter, thickness, weight) {
     //Nickel Specs
@@ -68,7 +70,15 @@ class CoinSlot {
   checkCollectedCoins() {
     return collectedCoinsCount
   }
-
+  EmptyBucket(){
+    collectedMoney = 0;
+    collectedCoinsCount.set("Nickles",0);
+    collectedCoinsCount.set("Dimes",0);
+    collectedCoinsCount.set("Quarters",0)
+  }
+  ReturnCoins() {
+    this.EmptyBucket()
+  }
 }
 
 module.exports = {

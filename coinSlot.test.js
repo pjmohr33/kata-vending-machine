@@ -18,14 +18,14 @@ const { coinValue,
   CoinSlot
 } = require("./coinSlot");
 
-describe('calculate coin value', () => {
+describe('Coinslot', () => {
   it("identifies a nickel by its diameter, thickness, weight and outputs the new inserted coin value", () => {
     let coinSlot = new CoinSlot();
-    // const poopSlot = new CoinSlot();
+    // const NewSlot = new CoinSlot();
     const result = coinSlot.insertCoin(NICKEL_DIAMETER, NICKEL_THICKNESS, NICKEL_WEIGHT);
     expect(result).toBe(NICKEL_VALUE);
-    // const poopResult = coinSlot.insertCoin(QUARTER_DIAMETER, QUARTER_THICKNESS, QUARTER_WEIGHT);
-    // expect(poopResult).toBe(QUARTER_VALUE);
+    // const NewResult = coinSlot.insertCoin(QUARTER_DIAMETER, QUARTER_THICKNESS, QUARTER_WEIGHT);
+    // expect(NewResult).toBe(QUARTER_VALUE);
   });
 
   it("indentifies a dime by diameter, thickness, weight, and outputs the new inserted coin value", () => {
@@ -57,7 +57,7 @@ describe('calculate coin value', () => {
     expect(collectedMonies).toBe(.7)
   });
 
-  it("tracks number of each coin inserted", ()=>{
+  it("tracks number of each coin inserted", () => {
     let coinSlot = new CoinSlot();
     coinSlot.insertCoin(NICKEL_DIAMETER, NICKEL_THICKNESS, NICKEL_WEIGHT);
     coinSlot.insertCoin(NICKEL_DIAMETER, NICKEL_THICKNESS, NICKEL_WEIGHT);
@@ -69,4 +69,22 @@ describe('calculate coin value', () => {
     expect(countCoins.get("Dimes")).toBe(1);
     expect(countCoins.get("Quarters")).toBe(2);
   });
+
+  it("returns the customer's coins when return coin's button is pressed",() => {
+    let coinSlot = new CoinSlot();
+    coinSlot.insertCoin(NICKEL_DIAMETER, NICKEL_THICKNESS, NICKEL_WEIGHT);
+    coinSlot.insertCoin(NICKEL_DIAMETER, NICKEL_THICKNESS, NICKEL_WEIGHT);
+    coinSlot.insertCoin(QUARTER_DIAMETER, QUARTER_THICKNESS, QUARTER_WEIGHT);
+    coinSlot.insertCoin(QUARTER_DIAMETER, QUARTER_THICKNESS, QUARTER_WEIGHT);
+    coinSlot.insertCoin(DIME_DIAMETER, DIME_THICKNESS, DIME_WEIGHT);
+    coinSlot.ReturnCoins();
+    const newCounts = coinSlot.checkCollectedCoins();
+    expect(newCounts.get("Nickles")).toBe(0);
+    expect(newCounts.get("Dimes")).toBe(0);
+    expect(newCounts.get("Quarters")).toBe(0);
+    const newValue = coinSlot.checkCollectedMoney();
+    expect(newValue).toBe(0);
+  });
+
+
 });
