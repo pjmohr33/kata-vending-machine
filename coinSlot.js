@@ -1,17 +1,19 @@
+// All money values are in pure cents and then formatted to dollars
+
 // Nickle Specifications
-const NICKEL_VALUE = 0.05;
+const NICKEL_VALUE = 5;
 const NICKEL_WEIGHT = 5;
 const NICKEL_DIAMETER = 21.21;
 const NICKEL_THICKNESS = 1.95;
 
 // Dime Specifications
-const DIME_VALUE = 0.1;
+const DIME_VALUE = 10;
 const DIME_WEIGHT = 2.268;
 const DIME_DIAMETER = 17.91;
 const DIME_THICKNESS = 1.35;
 
 // Quarter Specifications
-const QUARTER_VALUE = 0.25;
+const QUARTER_VALUE = 25;
 const QUARTER_WEIGHT = 5.670;
 const QUARTER_DIAMETER = 24.26;
 const QUARTER_THICKNESS = 1.75;
@@ -62,8 +64,16 @@ class CoinSlot {
     }
   }
 
+  formatCurrency (number) {
+    return new Intl.NumberFormat('en-US', { style: 'currency', currency: 'USD' }).format(number / 100);
+  }
+
   checkCollectedMoney () {
     return collectedMoney;
+  }
+
+  calculateChange (moneyPaid) {
+    collectedMoney -= moneyPaid;
   }
 
   checkCollectedCoins () {

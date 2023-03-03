@@ -58,7 +58,7 @@ describe('Coinslot', () => {
     const coinSlot = new CoinSlot();
     insert70Cents(coinSlot);
     const collectedMonies = coinSlot.checkCollectedMoney();
-    expect(collectedMonies).toBe(0.7);
+    expect(collectedMonies).toBe(70);
   });
 
   it('tracks number of each coin inserted', () => {
@@ -80,10 +80,5 @@ describe('Coinslot', () => {
     expect(newCounts.get('Quarters')).toBe(0);
     const newValue = coinSlot.checkCollectedMoney();
     expect(newValue).toBe(0);
-  });
-
-  it('checks ability to buy a product', () => {
-    const coinSlot = new CoinSlot();
-    insert70Cents(coinSlot);
   });
 });
