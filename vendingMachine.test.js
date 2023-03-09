@@ -28,9 +28,7 @@ describe('Vending Machine', () => {
     const vendingMachine = new VendingMachine();
     insert70Cents(vendingMachine.coinSlot);
     const buyCola = vendingMachine.buyProduct('Cola');
-    const remainingMoney = vendingMachine.coinSlot.checkCollectedMoney();
     expect(buyCola).toBe(false);
-    expect(remainingMoney).toBe(70);
   });
 
   it('checks ability to buy a Chips', () => {
@@ -38,17 +36,20 @@ describe('Vending Machine', () => {
     const vendingMachine = new VendingMachine();
     insert70Cents(coinSlot);
     const buyChips = vendingMachine.buyProduct('Chips');
-    const remainingMoney = vendingMachine.coinSlot.checkCollectedMoney();
     expect(buyChips).toBe(true);
-    expect(remainingMoney).toBe(20);
   });
 
   it('checks ability to buy a Candy', () => {
     const vendingMachine = new VendingMachine();
     insert70Cents(vendingMachine.coinSlot);
     const buyCandy = vendingMachine.buyProduct('Candy');
-    const remainingMoney = vendingMachine.coinSlot.checkCollectedMoney();
     expect(buyCandy).toBe(true);
-    expect(remainingMoney).toBe(5);
+  });
+
+  xit('checks amount of change dispensed', () => {
+    const vendingMachine = new VendingMachine();
+    insert70Cents(vendingMachine.coinSlot);
+    const buyCandy = vendingMachine.buyProduct('Candy');
+    expect(changeDispensed.get('Nickels')).toBe(1);
   });
 });

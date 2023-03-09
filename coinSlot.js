@@ -74,7 +74,13 @@ class CoinSlot {
 
   // Calculates Change after purchase
   calculateChange (moneyPaid) {
-    let totalChange = collectedMoney - moneyPaid;
+    const totalChange = collectedMoney - moneyPaid;
+    this.pullCoinsForChange(totalChange);
+    return totalChange;
+  }
+
+  // grabbing coins from change inventory for change
+  pullCoinsForChange (totalChange) {
     const quarterReturn = Math.floor(totalChange / 25);
     totalChange -= quarterReturn * 25;
     const dimeReturn = Math.floor(totalChange / 10);
