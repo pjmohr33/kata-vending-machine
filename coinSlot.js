@@ -72,8 +72,25 @@ class CoinSlot {
     return collectedMoney;
   }
 
+  // Calculates Change after purchase
   calculateChange (moneyPaid) {
-    collectedMoney -= moneyPaid;
+    let totalChange = collectedMoney - moneyPaid;
+    const quarterReturn = Math.floor(totalChange / 25);
+    totalChange -= quarterReturn * 25;
+    const dimeReturn = Math.floor(totalChange / 10);
+    totalChange -= dimeReturn * 10;
+    const nickelReturn = Math.floor(totalChange / 5);
+    totalChange -= nickelReturn * 5;
+    return this.dispenseChange(nickelReturn, dimeReturn, quarterReturn);
+  }
+
+  // Drops Calculated Change To Customer
+  dispenseChange (nickelReturn, dimeReturn, quarterReturn) {
+    const changeDispensed = new Map();
+    changeDispensed.set('Nickels', nickelReturn);
+    changeDispensed.set('Dimes', dimeReturn);
+    changeDispensed.set('Quarters', quarterReturn);
+    return changeDispensed;
   }
 
   checkCollectedCoins () {

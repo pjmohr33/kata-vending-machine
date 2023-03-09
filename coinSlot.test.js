@@ -18,22 +18,28 @@ const {
   CoinSlot
 } = require('./coinSlot');
 
-const insert70Cents = (coinSlot) => {
-  coinSlot.insertCoin(NICKEL_DIAMETER, NICKEL_THICKNESS, NICKEL_WEIGHT);
-  coinSlot.insertCoin(NICKEL_DIAMETER, NICKEL_THICKNESS, NICKEL_WEIGHT);
-  coinSlot.insertCoin(QUARTER_DIAMETER, QUARTER_THICKNESS, QUARTER_WEIGHT);
-  coinSlot.insertCoin(QUARTER_DIAMETER, QUARTER_THICKNESS, QUARTER_WEIGHT);
-  coinSlot.insertCoin(DIME_DIAMETER, DIME_THICKNESS, DIME_WEIGHT);
+const insertMoney = (coinSlot, money) => {
+  const quarters = Math.floor(money / 25);
+  money -= quarters * 25;
+  const dimes = Math.floor(money / 10);
+  money -= dimes * 10;
+  const nickels = Math.floor(money / 5);
+  for (let i = quarters; i > 0; i--) {
+    coinSlot.insertCoin(QUARTER_DIAMETER, QUARTER_THICKNESS, QUARTER_WEIGHT);
+  }
+  for (let i = dimes; i > 0; i--) {
+    coinSlot.insertCoin(DIME_DIAMETER, DIME_THICKNESS, DIME_WEIGHT);
+  }
+  for (let i = nickels; i > 0; i--) {
+    coinSlot.insertCoin(NICKEL_DIAMETER, NICKEL_THICKNESS, NICKEL_WEIGHT);
+  }
 };
 
 describe('Coinslot', () => {
   it('identifies a nickel by its diameter, thickness, weight and outputs the new inserted coin value', () => {
     const coinSlot = new CoinSlot();
-    // const NewSlot = new CoinSlot();
     const result = coinSlot.insertCoin(NICKEL_DIAMETER, NICKEL_THICKNESS, NICKEL_WEIGHT);
     expect(result).toBe(NICKEL_VALUE);
-    // const NewResult = coinSlot.insertCoin(QUARTER_DIAMETER, QUARTER_THICKNESS, QUARTER_WEIGHT);
-    // expect(NewResult).toBe(QUARTER_VALUE);
   });
 
   it('indentifies a dime by diameter, thickness, weight, and outputs the new inserted coin value', () => {
@@ -56,23 +62,23 @@ describe('Coinslot', () => {
 
   it('returns 70 cents when two quarters, a dime, and two nickels are insert', () => {
     const coinSlot = new CoinSlot();
-    insert70Cents(coinSlot);
+    insertMoney(coinSlot, 70);
     const collectedMonies = coinSlot.checkCollectedMoney();
     expect(collectedMonies).toBe(70);
   });
 
   it('tracks number of each coin inserted', () => {
     const coinSlot = new CoinSlot();
-    insert70Cents(coinSlot);
+    insertMoney(coinSlot, 70);
     const countCoins = coinSlot.checkCollectedCoins();
-    expect(countCoins.get('Nickles')).toBe(2);
-    expect(countCoins.get('Dimes')).toBe(1);
+    expect(countCoins.get('Nickles')).toBe(0);
+    expect(countCoins.get('Dimes')).toBe(2);
     expect(countCoins.get('Quarters')).toBe(2);
   });
 
   it("returns the customer's coins when return coin's button is pressed", () => {
     const coinSlot = new CoinSlot();
-    insert70Cents(coinSlot);
+    insertMoney(coinSlot, 70);
     coinSlot.ReturnCoins();
     const newCounts = coinSlot.checkCollectedCoins();
     expect(newCounts.get('Nickles')).toBe(0);
@@ -80,5 +86,32 @@ describe('Coinslot', () => {
     expect(newCounts.get('Quarters')).toBe(0);
     const newValue = coinSlot.checkCollectedMoney();
     expect(newValue).toBe(0);
+  });
+
+  it('Returns 1 nickel which making a 65 cent purchase with 70 cents', () => {
+    const coinSlot = new CoinSlot();
+    insertMoney(coinSlot, 70);
+    const change = coinSlot.calculateChange(65);
+    expect(change.get('Nickels')).toBe(1);
+    expect(change.get('Dimes')).toBe(0);
+    expect(change.get('Quarters')).toBe(0);
+  });
+
+  it('Returns 1 nickel, 1 dime, 1 quarter when making a 100 cent purchase with 140 cents', () => {
+    const coinSlot = new CoinSlot();
+    insertMoney(coinSlot, 140);
+    const change = coinSlot.calculateChange(100);
+    expect(change.get('Nickels')).toBe(1);
+    expect(change.get('Dimes')).toBe(1);
+    expect(change.get('Quarters')).toBe(1);
+  });
+
+  it('Returns 1 nickel, 1 dime, and 3 quarters when making a 50 cent purchase with 140 cents', () => {
+    const coinSlot = new CoinSlot();
+    insertMoney(coinSlot, 140);
+    const change = coinSlot.calculateChange(50);
+    expect(change.get('Nickels')).toBe(1);
+    expect(change.get('Dimes')).toBe(1);
+    expect(change.get('Quarters')).toBe(3);
   });
 });
