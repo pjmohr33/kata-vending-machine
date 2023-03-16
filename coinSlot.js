@@ -27,6 +27,11 @@ const BAD_COIN_THICKNESS = 1.52;
 class CoinSlot {
   constructor () {
     this.collectedMoney = 0;
+    // starting change inventory for initial set-up
+    this.coinInventory = new Map();
+    this.coinInventory.set('Quarters', 70);
+    this.coinInventory.set('Dimes', 100);
+    this.coinInventory.set('Nickles', 100);
     // current inserted coin value/counts
     this.collectedCoinsCount = new Map();
     this.collectedCoinsCount.set('Nickles', 0);
@@ -75,9 +80,18 @@ class CoinSlot {
     return totalChange;
   }
 
+  checkCoinInventory(Quarters, Dimes, Nickels){
+    const coinInventory = this.coinInventory;
+    // check if coin inventory has enough to pull requested coins
+    // pull available coins
+    // set inventory to be missing pulled coins
+    // return pulled coins
+  }
+
   // grabbing coins from change inventory for change
   pullCoinsForChange (totalChange) {
     const changePulled = new Map();
+    const coinInventory = this.coinInventory;
     changePulled.set('Quarters', Math.floor(totalChange / 25));
     totalChange -= changePulled.get('Quarters') * 25;
     changePulled.set('Dimes', Math.floor(totalChange / 10));
@@ -110,6 +124,10 @@ class CoinSlot {
 
   ReturnCoins () {
     this.EmptyBucket();
+  }
+
+  refillChange(Quarters, Nickels, Dimes){
+
   }
 }
 
