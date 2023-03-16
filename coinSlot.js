@@ -24,17 +24,14 @@ const BAD_COIN_WEIGHT = 2.5;
 const BAD_COIN_DIAMETER = 19.05;
 const BAD_COIN_THICKNESS = 1.52;
 
-// current inserted coin value/counts
-let collectedMoney;
-let collectedCoinsCount;
-
 class CoinSlot {
   constructor () {
-    collectedMoney = 0;
-    collectedCoinsCount = new Map();
-    collectedCoinsCount.set('Nickles', 0);
-    collectedCoinsCount.set('Dimes', 0);
-    collectedCoinsCount.set('Quarters', 0);
+    this.collectedMoney = 0;
+    // current inserted coin value/counts
+    this.collectedCoinsCount = new Map();
+    this.collectedCoinsCount.set('Nickles', 0);
+    this.collectedCoinsCount.set('Dimes', 0);
+    this.collectedCoinsCount.set('Quarters', 0);
   }
 
   insertCoin (diameter, thickness, weight) {
@@ -42,23 +39,23 @@ class CoinSlot {
     if (diameter === NICKEL_DIAMETER &&
       thickness === NICKEL_THICKNESS &&
       weight === NICKEL_WEIGHT) {
-      collectedMoney += NICKEL_VALUE;
-      collectedCoinsCount.set('Nickles', collectedCoinsCount.get('Nickles') + 1);
-      return collectedMoney;
+      this.collectedMoney += NICKEL_VALUE;
+      this.collectedCoinsCount.set('Nickles', this.collectedCoinsCount.get('Nickles') + 1);
+      return this.collectedMoney;
 
       // Dime Specs
     } else if (diameter === DIME_DIAMETER &&
       thickness === DIME_THICKNESS &&
       weight === DIME_WEIGHT) {
-      collectedMoney += DIME_VALUE;
-      collectedCoinsCount.set('Dimes', collectedCoinsCount.get('Dimes') + 1);
-      return collectedMoney;
+      this.collectedMoney += DIME_VALUE;
+      this.collectedCoinsCount.set('Dimes', this.collectedCoinsCount.get('Dimes') + 1);
+      return this.collectedMoney;
     } else if (diameter === QUARTER_DIAMETER &&
       thickness === QUARTER_THICKNESS &&
       weight === QUARTER_WEIGHT) {
-      collectedMoney += QUARTER_VALUE;
-      collectedCoinsCount.set('Quarters', collectedCoinsCount.get('Quarters') + 1);
-      return collectedMoney;
+      this.collectedMoney += QUARTER_VALUE;
+      this.collectedCoinsCount.set('Quarters', this.collectedCoinsCount.get('Quarters') + 1);
+      return this.collectedMoney;
     } else {
       return BAD_COIN_VALUE;
     }
@@ -69,12 +66,12 @@ class CoinSlot {
   }
 
   checkCollectedMoney () {
-    return collectedMoney;
+    return this.collectedMoney;
   }
 
   // Calculates Change after purchase
   calculateChange (moneyPaid) {
-    const totalChange = collectedMoney - moneyPaid;
+    const totalChange = this.collectedMoney - moneyPaid;
     return totalChange;
   }
 
@@ -101,14 +98,14 @@ class CoinSlot {
   }
 
   checkCollectedCoins () {
-    return collectedCoinsCount;
+    return this.collectedCoinsCount;
   }
 
   EmptyBucket () {
-    collectedMoney = 0;
-    collectedCoinsCount.set('Nickles', 0);
-    collectedCoinsCount.set('Dimes', 0);
-    collectedCoinsCount.set('Quarters', 0);
+    this.collectedMoney = 0;
+    this.collectedCoinsCount.set('Nickles', 0);
+    this.collectedCoinsCount.set('Dimes', 0);
+    this.collectedCoinsCount.set('Quarters', 0);
   }
 
   ReturnCoins () {
