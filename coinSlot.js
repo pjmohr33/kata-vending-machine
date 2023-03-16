@@ -75,28 +75,29 @@ class CoinSlot {
   // Calculates Change after purchase
   calculateChange (moneyPaid) {
     const totalChange = collectedMoney - moneyPaid;
-    this.pullCoinsForChange(totalChange);
     return totalChange;
   }
 
   // grabbing coins from change inventory for change
   pullCoinsForChange (totalChange) {
-    const quarterReturn = Math.floor(totalChange / 25);
-    totalChange -= quarterReturn * 25;
-    const dimeReturn = Math.floor(totalChange / 10);
-    totalChange -= dimeReturn * 10;
-    const nickelReturn = Math.floor(totalChange / 5);
-    totalChange -= nickelReturn * 5;
-    return this.dispenseChange(nickelReturn, dimeReturn, quarterReturn);
+    const changePulled = new Map();
+    changePulled.set('Quarters', Math.floor(totalChange / 25));
+    totalChange -= changePulled.get('Quarters') * 25;
+    changePulled.set('Dimes', Math.floor(totalChange / 10));
+    totalChange -= changePulled.get('Dimes') * 10;
+    changePulled.set('Nickels', Math.floor(totalChange / 5));
+    totalChange -= changePulled.get('Nickels') * 5;
+    return changePulled;
   }
 
   // Drops Calculated Change To Customer
-  dispenseChange (nickelReturn, dimeReturn, quarterReturn) {
-    const changeDispensed = new Map();
-    changeDispensed.set('Nickels', nickelReturn);
-    changeDispensed.set('Dimes', dimeReturn);
-    changeDispensed.set('Quarters', quarterReturn);
-    return changeDispensed;
+  dispenseChange (moneyPaid) {
+    const totalChange = this.calculateChange(moneyPaid);
+    const pulledCoins = this.pullCoinsForChange(totalChange);
+    pulledCoins.set('Nickels', 0);
+    pulledCoins.set('Dimes', 0);
+    pulledCoins.set('Quarters', 0);
+    return pulledCoins;
   }
 
   checkCollectedCoins () {

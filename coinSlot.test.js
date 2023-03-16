@@ -88,30 +88,34 @@ describe('Coinslot', () => {
     expect(newValue).toBe(0);
   });
 
-  it('Returns 1 nickel which making a 65 cent purchase with 70 cents', () => {
+  it('Returns 1 nickel, 1 dime, 1 quarter when it has 40 cents in change', () => {
     const coinSlot = new CoinSlot();
-    insertMoney(coinSlot, 70);
-    const change = coinSlot.calculateChange(65);
-    expect(change.get('Nickels')).toBe(1);
-    expect(change.get('Dimes')).toBe(0);
-    expect(change.get('Quarters')).toBe(0);
-  });
-
-  it('Returns 1 nickel, 1 dime, 1 quarter when making a 100 cent purchase with 140 cents', () => {
-    const coinSlot = new CoinSlot();
-    insertMoney(coinSlot, 140);
-    const change = coinSlot.calculateChange(100);
+    const change = coinSlot.pullCoinsForChange(40);
     expect(change.get('Nickels')).toBe(1);
     expect(change.get('Dimes')).toBe(1);
     expect(change.get('Quarters')).toBe(1);
   });
 
-  it('Returns 1 nickel, 1 dime, and 3 quarters when making a 50 cent purchase with 140 cents', () => {
+  it('returns 90 cents when calculating a 50 cent purchase with 140 cents inserted', () => {
     const coinSlot = new CoinSlot();
     insertMoney(coinSlot, 140);
     const change = coinSlot.calculateChange(50);
-    expect(change.get('Nickels')).toBe(1);
-    expect(change.get('Dimes')).toBe(1);
-    expect(change.get('Quarters')).toBe(3);
+    expect(change).toBe(90);
+  });
+
+  it('Returns 1 nickel, 1 dime, and 3 quarters when making a 50 cent purchase with 140 cents', () => {
+    const coinSlot = new CoinSlot();
+    const pulledCoins = coinSlot.pullCoinsForChange(90);
+    expect(pulledCoins.get('Nickels')).toBe(1);
+    expect(pulledCoins.get('Dimes')).toBe(1);
+    expect(pulledCoins.get('Quarters')).toBe(3);
+  });
+
+  it('returns no change remaining when purchasing a product', () => {
+    const coinSlot = new CoinSlot();
+    const dispensedChange = coinSlot.dispenseChange(50);
+    expect(dispensedChange.get('Quarters')).toBe(0);
+    expect(dispensedChange.get('Dimes')).toBe(0);
+    expect(dispensedChange.get('Nickels')).toBe(0);
   });
 });
