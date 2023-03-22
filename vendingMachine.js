@@ -16,7 +16,7 @@ class VendingMachine {
 
   buyProduct (item) {
     if (this.coinSlot.checkCollectedMoney() >= productPrices[item]) {
-      this.coinSlot.calculateChange(productPrices[item]);
+      this.coinSlot.dispenseChange(productPrices[item]);
       return true;
     } else {
       return false;
