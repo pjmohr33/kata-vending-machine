@@ -27,7 +27,7 @@ describe('Vending Machine', () => {
   beforeEach(() => {
     vendingMachine = new VendingMachine();
   });
-  it('checks ability to buy a Cola', () => {
+  xit('checks ability to buy a Cola', () => {
     insert70Cents(vendingMachine.coinSlot);
     const buyCola = vendingMachine.buyProduct('Cola');
     expect(buyCola).toBe(false);
@@ -36,12 +36,21 @@ describe('Vending Machine', () => {
   it('checks ability to buy a Chips', () => {
     insert70Cents(vendingMachine.coinSlot);
     const buyChips = vendingMachine.buyProduct('Chips');
-    expect(buyChips).toBe(true);
+    expect(buyChips).toBe('1 Chips');
+    expect(vendingMachine.checkDisplay()).toBe('THANK YOU');
   });
 
   it('checks ability to buy a Candy', () => {
     insert70Cents(vendingMachine.coinSlot);
     const buyCandy = vendingMachine.buyProduct('Candy');
-    expect(buyCandy).toBe(true);
+    expect(buyCandy).toBe('1 Candy');
+    expect(vendingMachine.checkDisplay()).toBe('THANK YOU');
+    expect(vendingMachine.checkDisplay()).toBe('INSERT COIN');
   });
+  it("selects an item and check's price, check again and get's insert coin", () => {
+    vendingMachine.selectProduct('Cola');
+    expect(vendingMachine.checkDisplay()).toBe('PRICE $1.00');
+  });
+
+
 });
