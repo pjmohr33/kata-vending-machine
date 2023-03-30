@@ -40,6 +40,7 @@ describe('Vending Machine', () => {
     coinSlotInsert70Cents(vendingMachine.coinSlot);
     const buyCola = vendingMachine.buyProduct('Cola');
     expect(buyCola).toBe('PRICE $1.00');
+    expect(vendingMachine.checkDisplay()).toBe('$0.70');
   });
 
   it('checks ability to buy a Chips', () => {

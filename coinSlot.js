@@ -140,6 +140,7 @@ class CoinSlot {
     pulledCoins.set('Nickels', 0);
     pulledCoins.set('Dimes', 0);
     pulledCoins.set('Quarters', 0);
+    this.collectedMoney = 0;
     return pulledCoins;
   }
 
@@ -159,7 +160,7 @@ class CoinSlot {
   }
 
   refillChange (Quarters, Nickels, Dimes) {
-
+  // TODO - create function to refill coins
   }
 }
 
