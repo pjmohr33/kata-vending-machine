@@ -46,7 +46,6 @@ class CoinSlot {
       weight === NICKEL_WEIGHT) {
       this.collectedMoney += NICKEL_VALUE;
       this.collectedCoinsCount.set('Nickels', this.collectedCoinsCount.get('Nickels') + 1);
-      return this.collectedMoney;
 
       // Dime Specs
     } else if (diameter === DIME_DIAMETER &&
@@ -54,7 +53,6 @@ class CoinSlot {
       weight === DIME_WEIGHT) {
       this.collectedMoney += DIME_VALUE;
       this.collectedCoinsCount.set('Dimes', this.collectedCoinsCount.get('Dimes') + 1);
-      return this.collectedMoney;
 
       // Quarter Specs
     } else if (diameter === QUARTER_DIAMETER &&
@@ -62,10 +60,11 @@ class CoinSlot {
       weight === QUARTER_WEIGHT) {
       this.collectedMoney += QUARTER_VALUE;
       this.collectedCoinsCount.set('Quarters', this.collectedCoinsCount.get('Quarters') + 1);
-      return this.collectedMoney;
     } else {
       return BAD_COIN_VALUE;
     }
+
+    return this.collectedMoney;
   }
 
   formatCurrency (number) {

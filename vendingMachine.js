@@ -26,8 +26,15 @@ class VendingMachine {
     this.productSelected = '';
   }
 
+  insertCoin (diameter, thickness, weight) {
+    const collectedMoney = this.coinSlot.insertCoin(diameter, thickness, weight);
+    this.machineStatus = 'COLLECTING COINS';
+    this.display = this.coinSlot.formatCurrency(collectedMoney);
+  }
+
   selectProduct (item) {
     this.productSelected = item;
+    this.machineStatus = 'PRODUCT SELECTED';
     return this.productSelected;
   }
 
@@ -39,7 +46,6 @@ class VendingMachine {
         this.productInventory.set('item', newItemCount);
         this.coinSlot.dispenseChange(productPrices[item]);
         this.machineStatus = 'BOUGHT PRODUCT';
-        this.productSelected = '';
         return `1 ${item}`;
       } else {
         return this.checkDisplay;
@@ -50,28 +56,46 @@ class VendingMachine {
   }
 
   checkDisplay () {
-    // no money in the vending machine
-    if (this.machineStatus === 'NO COINS INSERTED' && this.productSelected === '') {
+    // reset display function
+    const resetDisplay = () => {
       this.display = 'INSERT COIN';
-      return this.display;
-    }
-    // bought product messages
-    if (this.machineStatus === 'BOUGHT PRODUCT' && this.displayChecks === 0) {
-      this.display = 'THANK YOU';
-      this.displayChecks++;
-      return this.display;
-    } else if (this.machineStatus === 'BOUGHT PRODUCT' && this.displayChecks > 0) {
       this.displayChecks = 0;
       this.machineStatus = 'NO COINS INSERTED';
+      this.productSelected = '';
+    };
+
+    const emptyChecks = this.displayChecks === 0;
+
+    // bought product messages
+    if (this.machineStatus === 'BOUGHT PRODUCT' && emptyChecks) {
+      this.display = 'THANK YOU';
+      this.displayChecks++;
+    } else if (this.machineStatus === 'BOUGHT PRODUCT' && this.displayChecks > 0) {
+      resetDisplay();
       return this.checkDisplay();
     }
-    if (this.productSelected !== '' && this.displayChecks === 0) {
+
+    if (this.machineStatus === 'PRODUCT SELECTED' && emptyChecks) {
       let itemPrice = productPrices[this.productSelected];
       itemPrice = this.coinSlot.formatCurrency(itemPrice);
       this.display = `PRICE ${itemPrice}`;
       this.productSelected = '';
-      return this.display;
+      this.displayChecks++;
+    } else if (this.machineStatus === 'PRODUCT SELECTED' && this.displayChecks > 0) {
+      resetDisplay();
+      return this.checkDisplay();
     }
+
+    if (this.machineStatus === 'COLLECTING COINS' && emptyChecks) {
+      const moneyCollected = this.coinSlot.checkCollectedMoney();
+      this.display = this.coinSlot.formatCurrency(moneyCollected);
+      this.displayChecks++;
+    } else if (this.machineStatus === 'COLLECTING COINS' && this.displayChecks > 0) {
+      resetDisplay();
+      return this.checkDisplay();
+    }
+
+    return this.display;
   }
 }
 module.exports = {
