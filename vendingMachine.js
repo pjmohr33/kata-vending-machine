@@ -48,10 +48,11 @@ class VendingMachine {
         this.machineStatus = 'BOUGHT PRODUCT';
         return `1 ${item}`;
       } else {
-        return this.checkDisplay;
+        this.machineStatus = 'INSUFFICIENT FUNDS';
+        return this.checkDisplay();
       }
     } else {
-      return false;
+      // // return false;
     }
   }
 
@@ -64,7 +65,10 @@ class VendingMachine {
       this.productSelected = '';
     };
 
+    // resuable values in this function
     const emptyChecks = this.displayChecks === 0;
+    const moneyCollected = this.coinSlot.formatCurrency(this.coinSlot.checkCollectedMoney());
+    const curProductPrice = this.coinSlot.formatCurrency(productPrices[this.productSelected]);
 
     // bought product messages
     if (this.machineStatus === 'BOUGHT PRODUCT' && emptyChecks) {
@@ -87,12 +91,14 @@ class VendingMachine {
     }
 
     if (this.machineStatus === 'COLLECTING COINS' && emptyChecks) {
-      const moneyCollected = this.coinSlot.checkCollectedMoney();
-      this.display = this.coinSlot.formatCurrency(moneyCollected);
+      this.display = moneyCollected;
       this.displayChecks++;
     } else if (this.machineStatus === 'COLLECTING COINS' && this.displayChecks > 0) {
       resetDisplay();
       return this.checkDisplay();
+    }
+    if (this.machineStatus === 'INSUFFICIENT FUNDS' && emptyChecks) {
+      this.display = `PRICE ${curProductPrice}`;
     }
 
     return this.display;

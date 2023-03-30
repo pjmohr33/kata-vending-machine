@@ -36,10 +36,10 @@ describe('Vending Machine', () => {
     vendingMachine = new VendingMachine();
   });
 
-  xit('checks ability to buy a Cola', () => {
+  it('checks ability to buy a Cola', () => {
     coinSlotInsert70Cents(vendingMachine.coinSlot);
     const buyCola = vendingMachine.buyProduct('Cola');
-    expect(buyCola).toBe(false);
+    expect(buyCola).toBe('PRICE $1.00');
   });
 
   it('checks ability to buy a Chips', () => {
