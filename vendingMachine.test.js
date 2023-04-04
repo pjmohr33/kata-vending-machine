@@ -46,25 +46,45 @@ describe('Vending Machine', () => {
   it('checks ability to buy a Chips', () => {
     coinSlotInsert70Cents(vendingMachine.coinSlot);
     const buyChips = vendingMachine.buyProduct('Chips');
-    expect(buyChips).toBe('1 Chips');
-    expect(vendingMachine.checkDisplay()).toBe('THANK YOU');
+    expect(buyChips).toBe('THANK YOU');
   });
 
   it('checks ability to buy a Candy', () => {
     coinSlotInsert70Cents(vendingMachine.coinSlot);
     const buyCandy = vendingMachine.buyProduct('Candy');
-    expect(buyCandy).toBe('1 Candy');
-    expect(vendingMachine.checkDisplay()).toBe('THANK YOU');
+    expect(buyCandy).toBe('THANK YOU');
     expect(vendingMachine.checkDisplay()).toBe('INSERT COIN');
   });
+
   it("selects an item and check's price, check again and get's insert coin", () => {
-    vendingMachine.selectProduct('Cola');
-    expect(vendingMachine.checkDisplay()).toBe('PRICE $1.00');
+    expect(vendingMachine.buyProduct('Cola')).toBe('PRICE $1.00');
     expect(vendingMachine.checkDisplay()).toBe('INSERT COIN');
   });
 
   it('inserts coins in the vending machine insert coin function, checks display for current coin value', () => {
     vendingMachineInsert70Cents(vendingMachine);
     expect(vendingMachine.checkDisplay()).toBe('$0.70');
+  });
+
+  it('makes sure our functions for testing are working properly', () => {
+    expect(vendingMachine.zeroProductInventory('Cola')).toBe(0);
+    expect(vendingMachine.zeroCoinInventory('Quarters')).toBe(0);
+  });
+
+  it('zeros inventory and then tries to buy something that is out of stock', () => {
+    vendingMachine.zeroProductInventory('Cola');
+    expect(vendingMachine.buyProduct('Cola')).toBe('SOLD OUT');
+    expect(vendingMachine.buyProduct('Cola')).toBe('INSERT COIN');
+  });
+
+  it('displays exact change only when below acceptable nickel inventory levels', () => {
+    vendingMachine.zeroCoinInventory('Nickels');
+    expect(vendingMachine.checkDisplay()).toBe('EXACT CHANGE ONLY');
+  });
+
+  it('displays exact change only when below acceptable dime or quarter inventory levels', () => {
+    vendingMachine.zeroCoinInventory('Quarters');
+    vendingMachine.zeroCoinInventory('Dimes');
+    expect(vendingMachine.checkDisplay()).toBe('EXACT CHANGE ONLY');
   });
 });

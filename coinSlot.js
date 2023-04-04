@@ -148,6 +148,8 @@ class CoinSlot {
     return this.collectedCoinsCount;
   }
 
+  // TODO refactor Coin return to all for bad coin return and then specifically add a return all coins step
+
   EmptyBucket () {
     this.collectedMoney = 0;
     this.collectedCoinsCount.set('Nickels', 0);
@@ -159,8 +161,11 @@ class CoinSlot {
     this.EmptyBucket();
   }
 
-  refillChange (Quarters, Nickels, Dimes) {
-  // TODO - create function to refill coins
+  refillChange (Quarters, Dimes, Nickels) {
+    this.coinInventory.set('Quarters', this.coinInventory.get('Quarters') + Quarters);
+    this.coinInventory.set('Nickels', this.coinInventory.get('Nickels') + Nickels);
+    this.coinInventory.set('Dimes', this.coinInventory.get('Dimes') + Dimes);
+    return this.coinInventory;
   }
 }
 

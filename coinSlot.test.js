@@ -132,4 +132,12 @@ describe('Coinslot', () => {
     expect(coinInventory.get('Dimes')).toBe(100);
     expect(coinInventory.get('Nickels')).toBe(100);
   });
+
+  it('refill coin inventory', () => {
+    coinSlot.refillChange(50, 20, 100);
+    const coinInventory = coinSlot.checkCoinInventory();
+    expect(coinInventory.get('Quarters')).toBe(120);
+    expect(coinInventory.get('Dimes')).toBe(120);
+    expect(coinInventory.get('Nickels')).toBe(200);
+  });
 });

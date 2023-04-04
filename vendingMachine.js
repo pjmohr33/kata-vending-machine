@@ -15,6 +15,9 @@ const NO_COINS_INSERTED = 'NO COINS INSERTED';
 const BOUGHT_PRODUCT = 'BOUGHT PRODUCT';
 const PRODUCT_SELECTED = 'PRODUCT SELECTED';
 const INSUFFICIENT_FUNDS = 'INSUFFICIENT FUNDS';
+const SOLD_OUT = 'SOLD OUT';
+const EXACT_CHANGE_ONLY = 'EXACT CHANGE ONLY';
+const INSERT_COIN = 'INSERT COIN';
 
 class VendingMachine {
   constructor () {
@@ -33,6 +36,13 @@ class VendingMachine {
     this.productSelected = '';
   }
 
+  enoughChange () {
+    const quarters = this.coinSlot.coinInventory.get('Quarters') * 25;
+    const dimes = this.coinSlot.coinInventory.get('Dimes') * 10;
+    const nickels = this.coinSlot.coinInventory.get('Nickels') * 5;
+    return (quarters > 4 || dimes > 5) && nickels > 2;
+  }
+
   insertCoin (diameter, thickness, weight) {
     const collectedMoney = this.coinSlot.insertCoin(diameter, thickness, weight);
     this.machineStatus = COLLECTING_COINS;
@@ -41,25 +51,30 @@ class VendingMachine {
 
   selectProduct (item) {
     this.productSelected = item;
-    this.machineStatus = PRODUCT_SELECTED;
-    return this.productSelected;
+    if (this.productInventory.get(item) > 0) {
+      this.machineStatus = PRODUCT_SELECTED;
+      return true;
+    } else {
+      return false;
+    }
   }
 
   buyProduct (item) {
-    this.productSelected = item;
-    if (this.productInventory.get(item) > 0) {
+    const hasStock = this.selectProduct(item);
+    if (hasStock === true) {
       if (this.coinSlot.checkCollectedMoney() >= productPrices[item]) {
         const newItemCount = this.productInventory.get('item') - 1;
         this.productInventory.set('item', newItemCount);
         this.coinSlot.dispenseChange(productPrices[item]);
         this.machineStatus = BOUGHT_PRODUCT;
-        return `1 ${item}`;
+        return this.checkDisplay();
       } else {
         this.machineStatus = INSUFFICIENT_FUNDS;
         return this.checkDisplay();
       }
     } else {
-      // //TODO;
+      this.machineStatus = SOLD_OUT;
+      return this.checkDisplay();
     }
   }
 
@@ -88,7 +103,11 @@ class VendingMachine {
 
     // no inserted coins
     if (this.machineStatus === NO_COINS_INSERTED) {
-      this.display = 'INSERT COIN';
+      if (this.enoughChange()) {
+        this.display = INSERT_COIN;
+      } else {
+        this.display = EXACT_CHANGE_ONLY;
+      }
     }
 
     // bought product messages
@@ -99,7 +118,7 @@ class VendingMachine {
       resetDisplay();
       return this.checkDisplay();
     }
-
+    // select product
     if (this.machineStatus === PRODUCT_SELECTED && emptyChecks) {
       let itemPrice = productPrices[this.productSelected];
       itemPrice = this.coinSlot.formatCurrency(itemPrice);
@@ -110,7 +129,7 @@ class VendingMachine {
       resetDisplay();
       return this.checkDisplay();
     }
-
+    // collecting coins
     if (this.machineStatus === COLLECTING_COINS && emptyChecks) {
       this.display = moneyCollected;
       this.displayChecks++;
@@ -118,6 +137,7 @@ class VendingMachine {
       resetDisplay();
       return this.checkDisplay();
     }
+    // insufficient funds
     if (this.machineStatus === INSUFFICIENT_FUNDS && emptyChecks) {
       this.display = `PRICE ${curProductPrice}`;
       this.displayChecks++;
@@ -125,8 +145,27 @@ class VendingMachine {
       resetDisplay();
       return this.checkDisplay();
     }
+    // sold out
+    if (this.machineStatus === SOLD_OUT && emptyChecks) {
+      this.display = SOLD_OUT;
+      this.displayChecks++;
+    } else if (this.machineStatus === SOLD_OUT && beenChecked) {
+      resetDisplay();
+      return this.checkDisplay();
+    }
 
     return this.display;
+  }
+
+  // functions for tests
+  zeroProductInventory (item) {
+    this.productInventory.set(item, 0);
+    return this.productInventory.get(item);
+  }
+
+  zeroCoinInventory (coin) {
+    this.coinSlot.coinInventory.set(coin, 0);
+    return this.coinSlot.coinInventory.get(coin);
   }
 }
 module.exports = {
