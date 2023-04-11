@@ -61,6 +61,7 @@ class CoinSlot {
       this.collectedMoney += QUARTER_VALUE;
       this.collectedCoinsCount.set('Quarters', this.collectedCoinsCount.get('Quarters') + 1);
     } else {
+      // puts bad coin in coin return
       return BAD_COIN_VALUE;
     }
 
@@ -90,46 +91,59 @@ class CoinSlot {
   pullCoinsForChange (totalChange) {
     const changePulled = new Map();
     const coinInventory = this.coinInventory;
+
     // if we have enough quarters, pull all quarters needed
     if (coinInventory.get('Quarters') >= Math.floor(totalChange / 25)) {
+
       // set the new inventory for quarters
       const newQuarterCount = coinInventory.get('Quarters') - Math.floor(totalChange / 25);
       coinInventory.set('Quarters', newQuarterCount);
+
       // set the value of quarters pulled & adjust remaining change
       changePulled.set('Quarters', Math.floor(totalChange / 25));
       totalChange -= changePulled.get('Quarters') * 25;
+
     } else {
       // pull all quarters available from inventory
       const pulledQuarters = coinInventory.get('Quarters');
       changePulled.set('Quarters', pulledQuarters);
       totalChange -= pulledQuarters * 25;
     }
+
     if (coinInventory.get('Dimes') >= Math.floor(totalChange / 10)) {
       // set the new inventory for Dimes
+
       const newDimeCount = coinInventory.get('Dimes') - Math.floor(totalChange / 10);
       coinInventory.set('Dimes', newDimeCount);
+
       // set the value of Dimes pulled & adjust remaining change
       changePulled.set('Dimes', Math.floor(totalChange / 10));
       totalChange -= changePulled.get('Dimes') * 10;
+
     } else {
       // pull all Dimes available from inventory
       const pulledDimes = coinInventory.get('Dimes');
       changePulled.set('Dimes', pulledDimes);
       totalChange -= pulledDimes * 10;
     }
+
     if (coinInventory.get('Nickels') >= Math.floor(totalChange / 5)) {
       // set the new inventory for Nickels
+
       const newNickelCount = coinInventory.get('Nickels') - Math.floor(totalChange / 5);
       coinInventory.set('Nickels', newNickelCount);
+
       // set the value of Nickels pulled & adjust remaining change
       changePulled.set('Nickels', Math.floor(totalChange / 5));
       totalChange -= changePulled.get('Nickels') * 5;
+
     } else {
       // pull all Nickels available from inventory
       const pulledNickels = coinInventory.get('Nickels');
       changePulled.set('Nickels', pulledNickels);
       totalChange -= pulledNickels * 5;
     }
+
     return changePulled;
   }
 
@@ -148,17 +162,15 @@ class CoinSlot {
     return this.collectedCoinsCount;
   }
 
-  // TODO refactor Coin return to all for bad coin return and then specifically add a return all coins step
-
-  EmptyBucket () {
+  emptyBucket () {
     this.collectedMoney = 0;
     this.collectedCoinsCount.set('Nickels', 0);
     this.collectedCoinsCount.set('Dimes', 0);
     this.collectedCoinsCount.set('Quarters', 0);
   }
 
-  ReturnCoins () {
-    this.EmptyBucket();
+  returnAllCoins () {
+    this.emptyBucket();
   }
 
   refillChange (Quarters, Dimes, Nickels) {

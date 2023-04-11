@@ -37,10 +37,10 @@ class VendingMachine {
   }
 
   enoughChange () {
-    const quarters = this.coinSlot.coinInventory.get('Quarters') * 25;
-    const dimes = this.coinSlot.coinInventory.get('Dimes') * 10;
-    const nickels = this.coinSlot.coinInventory.get('Nickels') * 5;
-    return (quarters > 4 || dimes > 5) && nickels > 2;
+    const quarters = this.coinSlot.coinInventory.get('Quarters');
+    const dimes = this.coinSlot.coinInventory.get('Dimes');
+    const nickels = this.coinSlot.coinInventory.get('Nickels');
+    return (quarters > 2 && dimes > 1) || (quarters > 1 && dimes > 2 && nickels > 2) || dimes > 5 || nickels > 10;
   }
 
   insertCoin (diameter, thickness, weight) {
@@ -74,6 +74,7 @@ class VendingMachine {
       }
     } else {
       this.machineStatus = SOLD_OUT;
+      this.displayChecks = 0;
       return this.checkDisplay();
     }
   }
@@ -163,8 +164,8 @@ class VendingMachine {
     return this.productInventory.get(item);
   }
 
-  zeroCoinInventory (coin) {
-    this.coinSlot.coinInventory.set(coin, 0);
+  setCoinInventory (coin, count = 0) {
+    this.coinSlot.coinInventory.set(coin, count);
     return this.coinSlot.coinInventory.get(coin);
   }
 }

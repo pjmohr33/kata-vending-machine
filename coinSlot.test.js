@@ -40,17 +40,17 @@ describe('Coinslot', () => {
   beforeEach(() => {
     coinSlot = new CoinSlot();
   });
-  it('identifies a nickel by its diameter, thickness, weight and outputs the new inserted coin value', () => {
+  it("identifies a nickel by its diameter, thickness, weight and outputs the nickel's coin value", () => {
     const result = coinSlot.insertCoin(NICKEL_DIAMETER, NICKEL_THICKNESS, NICKEL_WEIGHT);
     expect(result).toBe(NICKEL_VALUE);
   });
 
-  it('indentifies a dime by diameter, thickness, weight, and outputs the new inserted coin value', () => {
+  it("indentifies a dime by diameter, thickness, weight, and outputs the dime's coin value", () => {
     const result = coinSlot.insertCoin(DIME_DIAMETER, DIME_THICKNESS, DIME_WEIGHT);
     expect(result).toBe(DIME_VALUE);
   });
 
-  it('indentifies a quarter by diameter, thickness, weight, and outputs the new inserted coin value', () => {
+  it("indentifies a quarter by diameter, thickness, weight, and outputs the quarter's coin value", () => {
     const result = coinSlot.insertCoin(QUARTER_DIAMETER, QUARTER_THICKNESS, QUARTER_WEIGHT);
     expect(result).toBe(QUARTER_VALUE);
   });
@@ -66,7 +66,7 @@ describe('Coinslot', () => {
     expect(collectedMonies).toBe(70);
   });
 
-  it('tracks number of each coin inserted', () => {
+  it('inserts 70 cents and tracks total count of each coin inserted', () => {
     insertMoney(coinSlot, 70);
     const countCoins = coinSlot.checkCollectedCoins();
     expect(countCoins.get('Nickels')).toBe(0);
@@ -74,9 +74,9 @@ describe('Coinslot', () => {
     expect(countCoins.get('Quarters')).toBe(2);
   });
 
-  it("returns the customer's coins when return coin's button is pressed", () => {
+  it('returns 70 cents when "return coins" button is pressed', () => {
     insertMoney(coinSlot, 70);
-    coinSlot.ReturnCoins();
+    coinSlot.returnAllCoins();
     const newCounts = coinSlot.checkCollectedCoins();
     expect(newCounts.get('Nickels')).toBe(0);
     expect(newCounts.get('Dimes')).toBe(0);
@@ -106,7 +106,7 @@ describe('Coinslot', () => {
     expect(pulledCoins.get('Quarters')).toBe(3);
   });
 
-  it('returns no change remaining when purchasing a product', () => {
+  it('Returns "0" in all coin values when finished dispensing change', () => {
     const dispensedChange = coinSlot.dispenseChange(50);
     expect(dispensedChange.get('Quarters')).toBe(0);
     expect(dispensedChange.get('Dimes')).toBe(0);
