@@ -168,6 +168,7 @@ class VendingMachine {
     this.coinSlot.coinInventory.set(coin, count);
     return this.coinSlot.coinInventory.get(coin);
   }
+  
 }
 module.exports = {
   VendingMachine
