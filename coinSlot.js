@@ -86,7 +86,7 @@ class CoinSlot {
     const coinInventory = this.coinInventory;
     return coinInventory;
   }
-  // TODO refactor test and code
+  
   // grabbing coins from change inventory for change
   pullCoinsForChange(totalChange) {
     const changePulled = new Map();
