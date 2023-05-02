@@ -106,6 +106,42 @@ describe('Coinslot', () => {
     expect(pulledCoins.get('Quarters')).toBe(3);
   });
 
+  it('Returns 9 dimes, and 0 quarters and 0 nickels when making a 50 cent purchase with 140 cents and no quarter inventory', () => {
+    insertMoney(coinSlot, 140);
+    coinSlot.coinInventory.set('Quarters', 0);
+    const pulledCoins = coinSlot.pullCoinsForChange(90);
+    expect(pulledCoins.get('Nickels')).toBe(0);
+    expect(pulledCoins.get('Dimes')).toBe(9);
+    expect(pulledCoins.get('Quarters')).toBe(0);
+  });
+
+  it('Returns 2 quarters, and 4 dimes and 0 nickels when making a 50 cent purchase with 140 cents and no quarter inventory', () => {
+    insertMoney(coinSlot, 140);
+    coinSlot.coinInventory.set('Nickels', 0);
+    const pulledCoins = coinSlot.pullCoinsForChange(90);
+    expect(pulledCoins.get('Nickels')).toBe(0);
+    expect(pulledCoins.get('Dimes')).toBe(4);
+    expect(pulledCoins.get('Quarters')).toBe(2);
+  });
+
+  it('Returns 1 quarters, and 4 dimes and 0 nickels when making a 50 cent purchase with 115 cents and no nickel inventory', () => {
+    insertMoney(coinSlot, 115);
+    coinSlot.coinInventory.set('Nickels', 0);
+    const pulledCoins = coinSlot.pullCoinsForChange(65);
+    expect(pulledCoins.get('Nickels')).toBe(0);
+    expect(pulledCoins.get('Dimes')).toBe(4);
+    expect(pulledCoins.get('Quarters')).toBe(1);
+  });
+
+  it('Returns 9 dimes, and 0 quarters and 0 nickels when making a 50 cent purchase with 140 cents and no quarter inventory', () => {
+    insertMoney(coinSlot, 140);
+    coinSlot.coinInventory.set('Quarters', 0);
+    const pulledCoins = coinSlot.pullCoinsForChange(90);
+    expect(pulledCoins.get('Nickels')).toBe(0);
+    expect(pulledCoins.get('Dimes')).toBe(9);
+    expect(pulledCoins.get('Quarters')).toBe(0);
+  });
+
   it('Returns "0" in all coin values when finished dispensing change', () => {
     const dispensedChange = coinSlot.dispenseChange(50);
     expect(dispensedChange.get('Quarters')).toBe(0);

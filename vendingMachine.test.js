@@ -150,10 +150,74 @@ describe('Vending Machine', () => {
     expect(vendingMachine.checkDisplay()).toBe('EXACT CHANGE ONLY');
   });
 
-  it('displays exact change only when no quarters and dimes and less than 10 nickels', () => {
+  it('displays exact change only when no quarters or dimes and less than 10 nickels', () => {
     vendingMachine.setCoinInventory('Nickels', 9);
     vendingMachine.setCoinInventory('Quarters');
     vendingMachine.setCoinInventory('Dimes');
     expect(vendingMachine.checkDisplay()).toBe('EXACT CHANGE ONLY');
+  });
+
+  it('Does not display exact change only when 3 quarters, 2 dime and no nickels', () => {
+    vendingMachine.setCoinInventory('Nickels');
+    vendingMachine.setCoinInventory('Quarters', 3);
+    vendingMachine.setCoinInventory('Dimes', 2);
+    expect(vendingMachine.checkDisplay()).toBe('INSERT COIN');
+  });
+
+  it('Does not display exact change only when 2 quarters, 3 dimes and 3 nickels', () => {
+    vendingMachine.setCoinInventory('Nickels', 3);
+    vendingMachine.setCoinInventory('Quarters', 2);
+    vendingMachine.setCoinInventory('Dimes', 3);
+    expect(vendingMachine.checkDisplay()).toBe('INSERT COIN');
+  });
+
+  it('Does not display exact change only when 0 quarters, 6 dimes and 2 nickels', () => {
+    vendingMachine.setCoinInventory('Nickels', 2);
+    vendingMachine.setCoinInventory('Quarters', 0);
+    vendingMachine.setCoinInventory('Dimes', 6);
+    expect(vendingMachine.checkDisplay()).toBe('INSERT COIN');
+  });
+
+  it('Does not display exact change only when 0 quarters, 0 dimes and 11 nickels', () => {
+    vendingMachine.setCoinInventory('Nickels', 11);
+    vendingMachine.setCoinInventory('Quarters', 0);
+    vendingMachine.setCoinInventory('Dimes', 0);
+    expect(vendingMachine.checkDisplay()).toBe('INSERT COIN');
+  });
+
+  it('displays CANT GIVE CHANGE Message when lacking change inventory for Cola purchase', () => {
+    vendingMachine.setCoinInventory('Nickels', 11);
+    vendingMachine.setCoinInventory('Quarters');
+    vendingMachine.setCoinInventory('Dimes');
+    vendingMachineInsert70Cents(vendingMachine);
+    vendingMachineInsert70Cents(vendingMachine);
+    vendingMachineInsert70Cents(vendingMachine);
+    vendingMachineInsert70Cents(vendingMachine);
+    expect(vendingMachine.buyProduct('Cola')).toBe('CANNOT RETURN NEEDED CHANGE, INSERT EXACT CHANGE ONLY');
+    expect(vendingMachine.checkDisplay()).toBe('INSERT COIN');
+  });
+
+  it('displays CANT GIVE CHANGE Message when lacking change inventory for Chip purchase', () => {
+    vendingMachine.setCoinInventory('Nickels', 11);
+    vendingMachine.setCoinInventory('Quarters');
+    vendingMachine.setCoinInventory('Dimes');
+    vendingMachineInsert70Cents(vendingMachine);
+    vendingMachineInsert70Cents(vendingMachine);
+    vendingMachineInsert70Cents(vendingMachine);
+    vendingMachineInsert70Cents(vendingMachine);
+    expect(vendingMachine.buyProduct('Chips')).toBe('CANNOT RETURN NEEDED CHANGE, INSERT EXACT CHANGE ONLY');
+    expect(vendingMachine.checkDisplay()).toBe('INSERT COIN');
+  });
+
+  it('displays CANT GIVE CHANGE Message when lacking change inventory for Candy purchase', () => {
+    vendingMachine.setCoinInventory('Nickels', 11);
+    vendingMachine.setCoinInventory('Quarters');
+    vendingMachine.setCoinInventory('Dimes');
+    vendingMachineInsert70Cents(vendingMachine);
+    vendingMachineInsert70Cents(vendingMachine);
+    vendingMachineInsert70Cents(vendingMachine);
+    vendingMachineInsert70Cents(vendingMachine);
+    expect(vendingMachine.buyProduct('Candy')).toBe('CANNOT RETURN NEEDED CHANGE, INSERT EXACT CHANGE ONLY');
+    expect(vendingMachine.checkDisplay()).toBe('INSERT COIN');
   });
 });

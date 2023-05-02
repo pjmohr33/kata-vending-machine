@@ -25,7 +25,7 @@ const BAD_COIN_DIAMETER = 19.05;
 const BAD_COIN_THICKNESS = 1.52;
 
 class CoinSlot {
-  constructor () {
+  constructor() {
     this.collectedMoney = 0;
     // starting change inventory for initial set-up
     this.coinInventory = new Map();
@@ -39,7 +39,7 @@ class CoinSlot {
     this.collectedCoinsCount.set('Quarters', 0);
   }
 
-  insertCoin (diameter, thickness, weight) {
+  insertCoin(diameter, thickness, weight) {
     // Nickel Specs
     if (diameter === NICKEL_DIAMETER &&
       thickness === NICKEL_THICKNESS &&
@@ -68,87 +68,88 @@ class CoinSlot {
     return this.collectedMoney;
   }
 
-  formatCurrency (number) {
+  formatCurrency(number) {
     return new Intl.NumberFormat('en-US', { style: 'currency', currency: 'USD' }).format(number / 100);
   }
 
-  checkCollectedMoney () {
+  checkCollectedMoney() {
     return this.collectedMoney;
   }
 
   // Calculates Change after purchase
-  calculateChange (moneyPaid) {
+  calculateChange(moneyPaid) {
     const totalChange = this.collectedMoney - moneyPaid;
     return totalChange;
   }
 
-  checkCoinInventory (Quarters, Dimes, Nickels) {
+  checkCoinInventory() {
     const coinInventory = this.coinInventory;
     return coinInventory;
   }
-
+  // TODO refactor test and code
   // grabbing coins from change inventory for change
-  pullCoinsForChange (totalChange) {
+  pullCoinsForChange(totalChange) {
     const changePulled = new Map();
     const coinInventory = this.coinInventory;
+    let newQuarterCount = coinInventory.get('Quarters');
+    let newDimeCount = coinInventory.get('Dimes');
+    let newNickelCount = coinInventory.get('Nickels');
+    let pulledQuarters = 0;
+    let pulledDimes = 0;
+    let pulledNickels = 0;
+    let changeRemainder = totalChange;
 
-    // if we have enough quarters, pull all quarters needed
-    if (coinInventory.get('Quarters') >= Math.floor(totalChange / 25)) {
-
-      // set the new inventory for quarters
-      const newQuarterCount = coinInventory.get('Quarters') - Math.floor(totalChange / 25);
-      coinInventory.set('Quarters', newQuarterCount);
-
-      // set the value of quarters pulled & adjust remaining change
-      changePulled.set('Quarters', Math.floor(totalChange / 25));
-      totalChange -= changePulled.get('Quarters') * 25;
-
-    } else {
-      // pull all quarters available from inventory
-      const pulledQuarters = coinInventory.get('Quarters');
-      changePulled.set('Quarters', pulledQuarters);
-      totalChange -= pulledQuarters * 25;
+    const pullQuarters = () => {
+      while (changeRemainder >= 25 && newQuarterCount > 0) {
+        pulledQuarters++;
+        newQuarterCount--;
+        changeRemainder -= 25;
+      }
     }
 
-    if (coinInventory.get('Dimes') >= Math.floor(totalChange / 10)) {
-      // set the new inventory for Dimes
-
-      const newDimeCount = coinInventory.get('Dimes') - Math.floor(totalChange / 10);
-      coinInventory.set('Dimes', newDimeCount);
-
-      // set the value of Dimes pulled & adjust remaining change
-      changePulled.set('Dimes', Math.floor(totalChange / 10));
-      totalChange -= changePulled.get('Dimes') * 10;
-
-    } else {
-      // pull all Dimes available from inventory
-      const pulledDimes = coinInventory.get('Dimes');
-      changePulled.set('Dimes', pulledDimes);
-      totalChange -= pulledDimes * 10;
+    const pullDimes = () => {
+      while (changeRemainder >= 10 && newDimeCount > 0) {
+        pulledDimes++;
+        newDimeCount--;
+        changeRemainder -= 10;
+      }
+    }
+    const pullNickels = () => {
+      while (changeRemainder >= 5 && newNickelCount > 0) {
+        pulledNickels++;
+        newNickelCount--;
+        changeRemainder -= 5;
+      }
     }
 
-    if (coinInventory.get('Nickels') >= Math.floor(totalChange / 5)) {
-      // set the new inventory for Nickels
+    const changeCalc = () => {
+      if (changeRemainder === 0) {
+        coinInventory.set('Quarters', newQuarterCount);
+        coinInventory.set('Dimes', newDimeCount);
+        coinInventory.set('Nickels', newNickelCount);
+        changePulled.set('Quarters', pulledQuarters);
+        changePulled.set('Dimes', pulledDimes);
+        changePulled.set('Nickels', pulledNickels);
 
-      const newNickelCount = coinInventory.get('Nickels') - Math.floor(totalChange / 5);
-      coinInventory.set('Nickels', newNickelCount);
-
-      // set the value of Nickels pulled & adjust remaining change
-      changePulled.set('Nickels', Math.floor(totalChange / 5));
-      totalChange -= changePulled.get('Nickels') * 5;
-
-    } else {
-      // pull all Nickels available from inventory
-      const pulledNickels = coinInventory.get('Nickels');
-      changePulled.set('Nickels', pulledNickels);
-      totalChange -= pulledNickels * 5;
+        return changePulled;
+      } else {
+        pulledQuarters -= 1;
+        newQuarterCount += 1;
+        changeRemainder += 25
+        pullDimes();
+        pullNickels();
+        return changeCalc();
+      }
     }
 
-    return changePulled;
+    pullQuarters();
+    pullDimes();
+    pullNickels();
+    return changeCalc();
   }
 
   // Drops Calculated Change To Customer
-  dispenseChange (moneyPaid) {
+  dispenseChange(moneyPaid) {
     const totalChange = this.calculateChange(moneyPaid);
     const pulledCoins = this.pullCoinsForChange(totalChange);
     pulledCoins.set('Nickels', 0);
@@ -158,22 +159,22 @@ class CoinSlot {
     return pulledCoins;
   }
 
-  checkCollectedCoins () {
+  checkCollectedCoins() {
     return this.collectedCoinsCount;
   }
 
-  emptyBucket () {
+  emptyBucket() {
     this.collectedMoney = 0;
     this.collectedCoinsCount.set('Nickels', 0);
     this.collectedCoinsCount.set('Dimes', 0);
     this.collectedCoinsCount.set('Quarters', 0);
   }
 
-  returnAllCoins () {
+  returnAllCoins() {
     this.emptyBucket();
   }
 
-  refillChange (Quarters, Dimes, Nickels) {
+  refillChange(Quarters, Dimes, Nickels) {
     this.coinInventory.set('Quarters', this.coinInventory.get('Quarters') + Quarters);
     this.coinInventory.set('Nickels', this.coinInventory.get('Nickels') + Nickels);
     this.coinInventory.set('Dimes', this.coinInventory.get('Dimes') + Dimes);
